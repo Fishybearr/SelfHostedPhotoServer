@@ -1,0 +1,110 @@
+<style>
+  
+.imgPrev
+{
+    height: 50vw;
+    width: 50vw;
+}
+
+.img
+{
+    max-width: 50vw;
+    height: auto;
+}
+</style>
+
+<html>
+    <body>
+        <p>RandomText</p>
+    </body>
+
+   
+</html>
+
+<script>
+
+
+
+
+ folderNum = "2";
+var xhr = new XMLHttpRequest();
+xhr.open("GET", "/Images/Presorted/" +folderNum, true);
+xhr.responseType = 'document';
+xhr.onload = () => {
+  if (xhr.status === 200) {
+    var elements = xhr.response.getElementsByTagName("a");
+    for (x of elements) {
+      if ( x.href.match(/\.(jpe?g|png|gif|JPE?G)$/) ) { 
+            //Add logic here to make small divs
+          let img = document.createElement("img");
+          img.src = x.href;
+
+          fetchLastModified(img.src,GetDate);  //Literally no idea why this is returned later
+
+          //GetModifedDate(img.src); //Get last modifed date of img
+
+          img.className = "img";
+
+          let imgDiv = document.createElement("div");
+          imgDiv.className = "imgPrev";
+          //imgDiv.textContent = GetModifedDate(img.src);
+           
+
+          //fetchLastModified(img.src,GetDate);
+
+          imgDiv.appendChild(img);
+          document.body.appendChild(imgDiv);
+          //document.body.appendChild(img);
+      } 
+    };
+  } 
+  else {
+    alert('Request failed. Returned status of ' + xhr.status);
+  }
+}
+xhr.send()
+
+
+//GetModifedDate("/Images/AmericanCyp.png",GetDate);
+
+//fetchLastModified("/Images/AmericanCyp.png",GetDate)
+
+//moral of the story is async never makes any sense no matter what
+
+function GetDate(date)
+{
+  console.log(date);
+  let dateHolder = document.createElement("div");
+  dateHolder.textContent = date;
+  document.body.appendChild(dateHolder);
+}
+
+
+function fetchLastModified(url, callback) {
+  fetch(url, {method: "HEAD"})
+  .then(r => {callback(new Date(r.headers.get('Last-Modified')))});
+
+
+
+}
+
+
+(function( w, d ) { 
+ console.log("starting scroll check");
+ w.addEventListener( 'scroll', function() { 
+
+   if ( w.innerHeight + w.scrollY > d.height - 300 ) { 
+
+       console.log("I need to load some more content here…"); 
+
+   } 
+
+ }); 
+
+})( window, document ); 
+
+    
+
+
+
+</script>
